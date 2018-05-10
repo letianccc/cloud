@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+    <table>
+
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>filename</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="file, iter: ${files}">
+              <td th:text="${iter.index + 1}"></td>
+              <td th:text="${file.name}"></td>
+              <td>
+                  <a th:href="@{/home(id=${file.id}, name=${file.name}, action='download')}">下载</a>
+              </td>
+              <td>
+                  <a th:href="@{/home(id=${file.id}, name=${file.name}, action='delete')}">删除</a>
+              </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+
+</body>
+</html>
