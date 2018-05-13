@@ -30,8 +30,9 @@ public class TestDatabase {
 
     public void init() throws Exception {
         String path = "file.txt";
-        String sql = "insert into file(name) values(?);";
-        update(sql, path);
+        String userId = "1";
+        String sql = "insert into file(name, user_id) values(?, ?);";
+        update(sql, path, userId);
     }
 
     private void update(String sql, String... args) throws SQLException {
@@ -50,11 +51,9 @@ public class TestDatabase {
     }
 
     public void clear() throws Exception {
-        Connection con = connect();
-        String sql = "truncate table file";
-        Statement stmt = con.createStatement();
-        stmt.executeUpdate(sql);
-        con.close();
+        String tableName = "file";
+
+        TestUtil.clearTable(databaseName, tableName);
     }
 
     private Connection connect() {

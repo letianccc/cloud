@@ -3,6 +3,7 @@ package database;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import springboot.User;
 import util.TestDatabase;
 import database.Database;
 
@@ -25,8 +26,9 @@ public class DatabaseTest {
     @Test
     public void getFiles() {
         try {
+            User user = new User("1", "test");
             tdb.init();
-            ArrayList files = db.getFiles();
+            ArrayList files = db.getFiles(user);
             assert files.size() == 1;
             HashMap file = (HashMap)files.get(0);
             assert file.get("id").equals("1");
@@ -41,7 +43,8 @@ public class DatabaseTest {
         try {
             String path = "file.txt";
             String id = "1";
-            db.uploadFile(path);
+            String userId = "1";
+            db.uploadFile(path, userId);
             String result = tdb.query(id);
             assert path.equals(result);
         } catch (Exception e) {

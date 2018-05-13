@@ -13,13 +13,14 @@ import util.TestUtil;
 
 public class HdfsTest {
     Hdfs hdfs;
+    String user = "test";
 
     @Before
     public void setup() throws Exception {
         hdfs = new Hdfs();
         String path = "test.txt";
         TestUtil.clearLocal(path);
-        TestUtil.clearHdfs(path);
+        TestUtil.clearHdfs(path, user);
     }
 
     @Test
@@ -27,9 +28,9 @@ public class HdfsTest {
         initHdfs();
 
         String path = "test.txt";
-        hdfs.deleteFile(path);
+        hdfs.deleteFile(path, user);
 
-        FileSystem hdfs = TestUtil.getHadoopFileSystem();
+        FileSystem hdfs = TestUtil.getHadoopFileSystem(user);
         Path p = new Path(path);
         assert !hdfs.exists(p);
 
@@ -41,7 +42,7 @@ public class HdfsTest {
         initHdfs();
 
         String path = "test.txt";
-        hdfs.downloadFile(path, path);
+        hdfs.downloadFile(path, path, user);
 
         BufferedReader in = new BufferedReader(new FileReader(path));
         String line;
@@ -58,11 +59,11 @@ public class HdfsTest {
     public void testUpload() throws Exception {
         String path = "test.txt";
         String content = "this is test.txt.\n";
-        TestUtil.initLocalFile(path, content);
+        TestUtil.createLocalFile(path, content);
 
-        hdfs.uploadFile(path);
+        hdfs.uploadFile(path, user);
 
-        FileSystem hdfs = TestUtil.getHadoopFileSystem();
+        FileSystem hdfs = TestUtil.getHadoopFileSystem(user);
         FSDataInputStream in = getInputStream(hdfs, path);
         File f = new File(path);
         FileInputStream caseIn = new FileInputStream(f);
@@ -77,8 +78,8 @@ public class HdfsTest {
         try {
             String path = "test.txt";
             String content = "this is test.txt.";
-            TestUtil.initLocalFile(path, content);
-            hdfs.uploadFile(path);
+            TestUtil.createLocalFile(path, content);
+            hdfs.uploadFile(path, user);
         } catch (Exception e) {
             e.printStackTrace();
         }

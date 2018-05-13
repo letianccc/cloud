@@ -7,24 +7,24 @@
 </head>
 
 <body>
-<div id="login_frame">
-    <p id="login_message">请登录账号</p>
-    <form action="#" th:action="@{/login}" th:object="${user}" method="post">
-        <p>
-            <label class="label_input">用户名</label>
-            <input type="text" id="username" th:field="*{name}" class="text_field"/>
-        </p>
-        <p>
-            <label class="label_input">密码</label>
-            <input type="text" id="password" th:field="*{password}" class="text_field"/>
-        </p>
-        <div id="login_control">
-            <input type="submit" id="btn_login" value="登录"/>
-            <!-- <a id="forget_pwd" href="forget_pwd.html">注册</a> -->
-            <a th:href="@{/register}" id="forget_pwd">注册</a>
-        </div>
-    </form>
-</div>
+    <div id="login_frame">
+        <p id="login_message">请登录账号</p>
+        <form action="#" th:action="@{/loginCheck}" method="get">
+            <p>
+                <label class="label_input">用户名</label>
+                <input type="text" id="userName" name="userName" class="text_field" required/>
+            </p>
+            <p>
+                <label class="label_input">密码</label>
+                <input type="text" id="password" name="password" class="text_field" required/>
+            </p>
+            <div id="login_control">
+                <input type="submit" id="btn_login" value="登录"/>
+                <!-- <a id="forget_pwd" href="forget_pwd.html">注册</a> -->
+                <a th:href="@{/registerPage}" id="register_bt">注册</a>
+            </div>
+        </form>
+    </div>
 
 </body>
 </html>

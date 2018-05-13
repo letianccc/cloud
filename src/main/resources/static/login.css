@@ -34,7 +34,7 @@ form p > * {
     font-size: 14px;
     font-family: 宋体;
 
-    width: 65px;
+    width: 90px;
     height: 32px;
     line-height: 32px;
     text-align: center;
@@ -71,7 +71,11 @@ form p > * {
     float: left;
 }
 
-#forget_pwd {
+/*#return_login {
+    text-decoration: none;
+}*/
+
+#login_bt, #register_bt {
     font-size: 12px;
     color: #3CD8FF;
     text-decoration: none;
@@ -80,15 +84,19 @@ form p > * {
     top: 5px;
 }
 
-#forget_pwd:hover {
-    color: blue;
-    text-decoration: underline;
-}
-
 #login_control {
     padding: 0 28px;
 }
 
 #login_message {
     color: #3CD8FF;
+}
+
+#message {
+    color: #3CD8FF;
+}
+
+input:focus {
+    outline: none;
+
 }
