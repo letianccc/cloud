@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static springboot.Util.log;
 
 @Controller
@@ -40,17 +41,29 @@ public class HomeController {
         return "redirect:userPage";
     }
 
-    @GetMapping("/")
-    public String showLoginPage(Model model) throws Exception {
+    // @GetMapping("/")
+    // public String showLoginPage(Model model) throws Exception {
+    //     return "hello word";
+    //     // return "redirect:loginPage";
+    //     // return "redirect:registerPage";
+    //     // return "redirect:login?userName=test&password=123";
+    // }
+
+    @RequestMapping(value="/", method=GET)
+    public String login() {
         return "redirect:loginPage";
-        // return "redirect:registerPage";
-        // return "redirect:login?userName=test&password=123";
+        // return "login.html";
+    }
+
+    @RequestMapping(value="/index", method=GET)
+    public String showIndexPage() {
+        return "index.html";
     }
 
     @GetMapping("/test")
     public String test(Model model) throws Exception {
-        return "redirect:login";
-        // return "redirect:login?userName=test&password=123";
+        // return "redirect:login";
+        return "redirect:loginCheck?userName=test&password=123";
     }
 
 

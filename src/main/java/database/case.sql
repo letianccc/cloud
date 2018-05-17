@@ -5,7 +5,7 @@ create table file
     name varchar(30) not null,
     user_id int not null,
     foreign key(user_id) references user(id)
-);
+) character set = utf8;
 insert into file(name, user_id) values("file1", 1);
 insert into file(name, user_id) values("file2", 1);
 select * from file;

@@ -4,6 +4,7 @@ import control.Control;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
@@ -20,33 +21,25 @@ public class LoginController {
         control = new Control();
     }
 
-    // @RequestMapping(value="/login", method= RequestMethod.GET)
-    // public String register(
-    // @RequestParam(value="userName") String name,
-    // @RequestParam(value="password") String password, HttpSession session) throws Exception{
-    //     User user = control.getUser(name, password);
-    //     if (isUserValid(user)) {
-    //         session.setAttribute("user", user);
-    //         return "redirect:userPage";
-    //     }
-    //     return "index.html";
-    // }
-
     @GetMapping("/loginCheck")
     public String login(
             @RequestParam(value="userName") String name,
             @RequestParam(value="password") String password,
+            RedirectAttributes attribute,
             HttpSession session) throws Exception{
         User user = control.getUser(name, password);
         if (isUserValid(user)) {
             session.setAttribute("user", user);
             return "redirect:userPage";
+        } else {
+            String message = "用户信息错误，请重新输入";
+            attribute.addFlashAttribute("message", message);
+            return "redirect:loginPage";
         }
-        return "index.html";
     }
 
     @GetMapping("/loginPage")
-    public String login() throws Exception{
+    public String showPage() throws Exception{
         return "login.html";
     }
 

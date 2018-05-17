@@ -7,36 +7,31 @@
 
 </head>
 <body>
-    <h1 th:text="${session.user.name}+的网盘"></h1>
     <div>
-        <a th:href="@{/flushUserPage}" id="flushUserPage" th:text="${session.user.name}+的网盘"></a>
-    </div>
-    <div id="login_control">
+        <a th:href="@{/flushUserPage}" id="flush_userpage" th:text="${session.user.name}+的网盘"></a>
         <a th:href="@{/logout}" id="logout_bt">注销</a>
     </div>
-    <div th:if="${message}">
-		<h2 th:text="${message}"/>
-	</div>
-    <form method="POST" enctype="multipart/form-data" action="/upload" >
-        <input type="file" name="file" /><br/><br/>
-        <input type="submit" value="Submit" />
-    </form>
 
-    <form action="#" th:action="@{/search}" method="get">
-        <input type="text" name="searchText"/><br/><br/>
-        <input type="submit" value="搜索" />
-    </form>
+    <hr>
+
+    <div>
+        <form method="POST" enctype="multipart/form-data" action="/upload" id="upload_form">
+                <input type="file" name="file" id="uploader"/>
+                <input type="submit" value="上传" id="upload_submit"/>
+        </form>
+
+        <form action="#" th:action="@{/search}" method="get" id="search_form">
+                <input type="text" name="searchText"/>
+                <input type="submit" value="搜索" id="search_submit"/>
+        </form>
+    </div>
+
 
     <div th:if="${operateResult}">
-		<p th:text="${operateResult}"></p>
+		<p th:text="${operateResult}" id="message"></p>
 	</div>
 
     <table>
-        <!-- <tr>
-            <td>
-                <input type="file" />上传文件
-            </td>
-        </tr> -->
         <thead>
         <tr>
           <th>#</th>
@@ -60,10 +55,6 @@
 
         </tbody>
     </table>
-
-    <div th:if="${notFindMessage}">
-		<p th:text="${notFindMessage}"></p>
-	</div>
 
 
 </body>

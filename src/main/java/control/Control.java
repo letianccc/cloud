@@ -9,6 +9,7 @@ import springboot.User;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Control {
     Database database;
@@ -22,12 +23,67 @@ public class Control {
         hdfs.downloadFile(filename, filename, userName);
     }
 
-    public void uploadFile(MultipartFile file, User user) throws Exception {
-        String fileName = file.getOriginalFilename();
-        hdfs.uploadFile(file, user);
+    public String uploadFile(MultipartFile file, User user) throws Exception {
+        String fileName = getFileName(file, user);
+        hdfs.uploadFile(fileName, file, user);
         database.uploadFile(fileName, user);
-        // File f = database.getFile(fileName, user);
-        // return f;
+        return fileName;
+    }
+
+    private String getFileName(MultipartFile file, User user) throws Exception {
+        String fileName = file.getOriginalFilename();
+        boolean isExist = database.isExistFile(fileName, user);
+        if (!isExist) {
+            return fileName;
+        } else {
+            String name = getUnuseCopyName(fileName, user);
+            return name;
+        }
+    }
+
+    private String getUnuseCopyName(String fileName, User user) throws Exception {
+        ArrayList<String> copyNames = database.getCopyNames(fileName, user);
+        String id = getUnuseId(copyNames);
+        String name = fileName + "副本" + id;
+        return name;
+    }
+
+    private String getUnuseId(ArrayList<String> copyNames) {
+        if (copyNames == null) {
+            return "1";
+        } else {
+            ArrayList<Integer> copyIds = getCopyIds(copyNames);
+            String id = findId(copyIds);
+            return id;
+        }
+    }
+
+    private String findId(ArrayList<Integer> copyIds) {
+        Integer target = copyIds.get(copyIds.size() - 1) + 1;
+        for (int i = 1; i <= copyIds.size(); i++) {
+            int id = copyIds.get(i - 1);
+            if (id != i) {
+                target = i;
+                break;
+            }
+        }
+        return Integer.toString(target);
+    }
+
+    private ArrayList<Integer> getCopyIds(ArrayList<String> fileNames) {
+        ArrayList<Integer> target = new ArrayList<>();
+        for(String name: fileNames) {
+            Integer copyId = getPostfix(name);
+            target.add(copyId);
+        }
+        Collections.sort(target);
+        return target;
+    }
+
+    private Integer getPostfix(String fileName) {
+        int index = fileName.lastIndexOf("副本");
+        String postfix = fileName.substring(index + 2);
+        return Integer.valueOf(postfix);
     }
 
     public void deleteFile(File file) throws Exception {

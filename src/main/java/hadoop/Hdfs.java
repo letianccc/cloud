@@ -55,9 +55,8 @@ public class Hdfs {
 
     }
 
-    public void uploadFile(MultipartFile file, User user) throws URISyntaxException, IOException, FileExit, InterruptedException  {
+    public void uploadFile(String fileName, MultipartFile file, User user) throws URISyntaxException, IOException, FileExit, InterruptedException  {
         FileSystem hdfs = getHadoopFileSystem(user.getName());
-        String fileName = file.getOriginalFilename();
         Path p = new Path(fileName);
         FSDataOutputStream dst = hdfs.create(p);
         InputStream src = file.getInputStream();

@@ -12,6 +12,8 @@ import util.TestDatabase;
 import util.TestUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static springboot.Util.log;
 
@@ -19,11 +21,10 @@ public class Main {
     public static void main(String[] args) throws Exception {
          String databaseName = "hadoop";
          TestUtil.initData(databaseName);
-
-        String in = "hdfs://localhost:9000/user/test";
-        String out = "hdfs://localhost:9000/user/test/search_output";
-//        Search.init(in, out);
-
+//
+//        String in = "hdfs://localhost:9000/user/test";
+//        String out = "hdfs://localhost:9000/user/test/search_output";
+////        Search.init(in, out);
 
     }
 

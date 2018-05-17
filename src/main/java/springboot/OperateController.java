@@ -69,19 +69,18 @@ public class OperateController {
             RedirectAttributes attribute,
             HttpSession session) throws Exception {
         if (file.isEmpty()) {
-            // attribute.addFlashAttribute("message", "请选择文件");
+            attribute.addFlashAttribute("operateResult", "请选择文件");
             return "redirect:userPage";
         }
-        User user = (User)session.getAttribute("user");
-        control.uploadFile(file, user);
-        updateUploadSession(file, user, session);
+        updateUploadSession(file, session);
         String message = "上传成功";
         attribute.addFlashAttribute("operateResult", message);
         return "redirect:userPage";
     }
 
-    private void updateUploadSession(MultipartFile file, User user, HttpSession session) throws Exception {
-        String fileName = file.getOriginalFilename();
+    private void updateUploadSession(MultipartFile file, HttpSession session) throws Exception {
+        User user = (User)session.getAttribute("user");
+        String fileName = control.uploadFile(file, user);
         File f = control.getFile(fileName, user);
         ArrayList<File> files = (ArrayList<File>)session.getAttribute("files");
         files.add(f);
@@ -92,32 +91,31 @@ public class OperateController {
     @GetMapping("/search")
     public String search(
             @RequestParam(value="searchText") String searchText,
-            HttpSession session, RedirectAttributes attribute,
-            Model model) throws Exception{
+            RedirectAttributes attribute,
+            HttpSession session) throws Exception{
         User user = (User)session.getAttribute("user");
         ArrayList<File> files = control.search(searchText, user.name);
-        if (canFind(files)) {
-            session.setAttribute("files", files);
-        } else {
-            String message = "不存在符合条件的文件";
-            attribute.addFlashAttribute("notFindMessage", message);
-        }
-        return "home.html";
+        setFiles(files, session);
+        setMessage(files, attribute);
+        return "redirect:userPage";
     }
 
-    private void updateSearchSession(MultipartFile file, User user, HttpSession session) throws Exception {
-        String fileName = file.getOriginalFilename();
-        File f = control.getFile(fileName, user);
-        ArrayList<File> files = (ArrayList<File>)session.getAttribute("files");
-        files.add(f);
+    private void setFiles(ArrayList<File> files, HttpSession session) {
         session.setAttribute("files", files);
     }
 
+    private void setMessage(ArrayList<File> files, RedirectAttributes attribute) {
+        String message;
+        if (canFind(files)) {
+            message = "搜索成功";
+        } else {
+            message = "不存在符合条件的文件";
+        }
+        attribute.addFlashAttribute("operateResult", message);
+    }
 
     private boolean canFind(ArrayList<File> files) {
         return files.size() != 0;
     }
-
-
 
 }

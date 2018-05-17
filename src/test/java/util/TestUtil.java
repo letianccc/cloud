@@ -56,12 +56,11 @@ public class TestUtil {
 
     public static void initData(String databaseName) throws Exception {
         String text = "this is file";
-        String postfix = ".txt";
         String filename = "file";
         String userName = "test";
 
         for (int id = 1; id < 10; id++) {
-            String path = filename + String.valueOf(id) + postfix;
+            String path = filename + String.valueOf(id);
             clearLocal(path);
         }
 
@@ -69,13 +68,13 @@ public class TestUtil {
         clearTable(databaseName, tableName);
 
         for (int id = 1; id < 10; id++) {
-            String path = filename + String.valueOf(id) + postfix;
-            String content = text + String.valueOf(id) + postfix + "\n";
+            String path = filename + String.valueOf(id);
+            String content = text + String.valueOf(id) + "\n";
             createLocalFile(path, content);
         }
 
         for (int id = 1; id < 10; id++) {
-            String path = filename + String.valueOf(id) + postfix;
+            String path = filename + String.valueOf(id);
             Path p = new Path(path);
             FileSystem hdfs = getHadoopFileSystem(userName);
             hdfs.copyFromLocalFile(p, p);
@@ -85,7 +84,7 @@ public class TestUtil {
         }
 
         for (int id = 1; id < 10; id++) {
-            String path = filename + String.valueOf(id) + postfix;
+            String path = filename + String.valueOf(id);
             clearLocal(path);
         }
 
@@ -175,5 +174,19 @@ public class TestUtil {
             return null;
         }
     }
+
+    public static boolean isUserEqual(User u1, User u2) {
+        if (u1.getId().equals(u2.getId())) {
+            if (u1.getName().equals(u2.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void clearUsers() {
+        
+    }
+
 
 }

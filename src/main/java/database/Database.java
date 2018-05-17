@@ -8,6 +8,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static springboot.Util.log;
+
 
 public class Database {
     String databaseName = "hadoop";
@@ -39,6 +41,9 @@ public class Database {
         ArrayList<File> target = new ArrayList<>();
         String sql = "select * from file where user_id = ?";
         ArrayList<HashMap<String, String>> files = query(sql, user.getId());
+        if (files == null) {
+            return new ArrayList();
+        }
         for (HashMap<String, String> file: files) {
             String id = file.get("id");
             String name = file.get("name");
@@ -62,11 +67,42 @@ public class Database {
         return files;
     }
 
+    public boolean isExistFile(String fileName, User user) throws Exception {
+        String sql = "select id, name from file where name = ? and user_id = ?";
+        String userId = user.getId();
+        ArrayList result = query(sql, fileName, userId);
+        return result != null;
+    }
+
+    public ArrayList<String> getCopyNames(String fileName, User user) throws Exception {
+        String sql = "select name from file where user_id = ? and name REGEXP ?;";
+        String userId = user.getId();
+        String regex = "^" + fileName + "副本[0-9]+$";
+        ArrayList<HashMap> copyNames = (ArrayList)query(sql, userId, regex);
+        ArrayList<String> target = formatCopyNames(copyNames);
+        return target;
+    }
+
+    private ArrayList<String> formatCopyNames(ArrayList<HashMap> copyNames) {
+        if (copyNames == null) {
+            return null;
+        }
+        ArrayList<String> target = new ArrayList<>();
+        for(HashMap map: copyNames) {
+            String name = (String)map.get("name");
+            target.add(name);
+        }
+        return target;
+    }
+
     public File getFile(String fileName, User user) throws Exception{
         ArrayList<File> files = new ArrayList();
         String sql = "select id, name from file where name = ? and user_id = ?";
         String userId = user.getId();
         ArrayList result = query(sql, fileName, userId);
+        if (result == null) {
+            return null;
+        }
         HashMap file = (HashMap)result.get(0);
         String id = (String)file.get("id");
         String name = (String)file.get("name");
@@ -104,7 +140,6 @@ public class Database {
         String sql = "insert into file(name, user_id) values(?, ?);";
         update(sql, path, userId);
     }
-
 
     private void update(String sql, String... args) throws SQLException {
         Connection con = connect();
@@ -169,7 +204,7 @@ public class Database {
     private Connection connect() {
         try {
             String root = "jdbc:mysql://localhost:3306/";
-            String conf = "useSSL=false";
+            String conf = "useSSL=false&characterEncoding=utf8";
             String DB_URL = String.format("%s%s?%s", root, databaseName, conf);
             Class.forName("com.mysql.jdbc.Driver");
             String name = "latin";

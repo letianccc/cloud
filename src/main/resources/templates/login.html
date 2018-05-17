@@ -18,9 +18,11 @@
                 <label class="label_input">密码</label>
                 <input type="text" id="password" name="password" class="text_field" required/>
             </p>
+            <div th:if="${message}">
+        		<p th:text="${message}" id="message"></p>
+        	</div>
             <div id="login_control">
                 <input type="submit" id="btn_login" value="登录"/>
-                <!-- <a id="forget_pwd" href="forget_pwd.html">注册</a> -->
                 <a th:href="@{/registerPage}" id="register_bt">注册</a>
             </div>
         </form>

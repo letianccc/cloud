@@ -71,10 +71,6 @@ form p > * {
     float: left;
 }
 
-/*#return_login {
-    text-decoration: none;
-}*/
-
 #login_bt, #register_bt {
     font-size: 12px;
     color: #3CD8FF;
@@ -94,9 +90,4 @@ form p > * {
 
 #message {
     color: #3CD8FF;
-}
-
-input:focus {
-    outline: none;
-
 }
